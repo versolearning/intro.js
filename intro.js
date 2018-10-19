@@ -1,6 +1,6 @@
 /**
- * Intro.js v2.9.3
- * https://github.com/usablica/intro.js
+ * Intro.js v2.9.4
+ * https://github.com/versolearning/intro.js
  *
  * Copyright (C) 2017 Afshin Mehrabani (@afshinmeh)
  */
@@ -32,7 +32,7 @@
     }
 })(function () {
   //Default config/variables
-  var VERSION = '2.9.3';
+  var VERSION = '2.9.4';
 
   /**
    * IntroJs main class
