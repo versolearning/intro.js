@@ -1,5 +1,5 @@
 /**
- * Intro.js v2.9.4
+ * Intro.js v2.9.7
  * https://github.com/versolearning/intro.js
  *
  * Copyright (C) 2017 Afshin Mehrabani (@afshinmeh)
@@ -32,7 +32,7 @@
   }
 })(function () {
   //Default config/variables
-  var VERSION = '2.9.4';
+  var VERSION = '2.9.7';
 
   /**
    * IntroJs main class
@@ -112,9 +112,10 @@
    * @method _introForElement
    * @param {Object} targetElm
    * @param {String} group
+   * @param {Boolean} noBackdrop
    * @returns {Boolean} Success or not?
    */
-  function _introForElement(targetElm, group) {
+  function _introForElement(targetElm, group, noBackdrop) {
     var allIntroSteps = targetElm.querySelectorAll("*[data-intro]"),
       introItems = [];
 
@@ -265,7 +266,7 @@
     this._introItems = introItems;
 
     //add overlay layer to the page
-    if (_addOverlayLayer.call(this, targetElm)) {
+    if (noBackdrop || _addOverlayLayer.call(this, targetElm)) {
       //then, start the show
       _nextStep.call(this);
 
@@ -1012,6 +1013,10 @@
    * @param {Object} targetElement
    */
   function _showElement(targetElement) {
+    var stepDefinition = this._introItems[this._currentStep];
+    var showOptionalBadge = stepDefinition && stepDefinition.requireDisplayingOptionalBadge;
+    var intro = showOptionalBadge ? ("<span class='introjs-optionalBadge'>(Optional)</span>" + targetElement.intro) : targetElement.intro;
+
     if (typeof (this._introChangeCallback) !== 'undefined') {
       this._introChangeCallback.call(this, targetElement.element);
     }
@@ -1090,7 +1095,7 @@
           oldHelperNumberLayer.innerHTML = targetElement.step;
         }
         //set current tooltip text
-        oldtooltipLayer.innerHTML = targetElement.intro;
+        oldtooltipLayer.innerHTML = intro;
         //set the tooltip position
         oldtooltipContainer.style.display = "block";
         _placeTooltip.call(self, targetElement.element, oldtooltipContainer, oldArrowLayer, oldHelperNumberLayer);
@@ -1153,7 +1158,7 @@
       arrowLayer.className = 'introjs-arrow';
 
       tooltipTextLayer.className = 'introjs-tooltiptext';
-      tooltipTextLayer.innerHTML = targetElement.intro;
+      tooltipTextLayer.innerHTML = intro;
 
       bulletsLayer.className = 'introjs-bullets';
 
@@ -2369,8 +2374,8 @@
       this._options = _mergeOptions(this._options, options);
       return this;
     },
-    start: function (group) {
-      _introForElement.call(this, this._targetElement, group);
+    start: function (group, noBackdrop) {
+      _introForElement.call(this, this._targetElement, group, noBackdrop);
       return this;
     },
     goToStep: function (step) {

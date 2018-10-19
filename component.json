@@ -2,7 +2,7 @@
   "name": "intro.js",
   "repo": "versolearning/intro.js",
   "description": "Better introductions for websites and features with a step-by-step guide for your projects",
-  "version": "2.9.4",
+  "version": "2.9.7",
   "main": "intro.js",
   "scripts": [
     "intro.js"
