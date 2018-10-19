@@ -505,8 +505,9 @@
    * @method _exitIntro
    * @param {Object} targetElement
    * @param {Boolean} force - Setting to `true` will skip the result of beforeExit callback
+   * @param {Boolean} keepBackdrop - Shadow backdrop won't be removed on exit
    */
-  function _exitIntro(targetElement, force) {
+  function _exitIntro(targetElement, force, keepBackdrop) {
     var continueExit = true;
 
     // calling onbeforeexit callback
@@ -521,17 +522,19 @@
     if (!force && continueExit === false) return;
 
     //remove overlay layers from the page
-    var overlayLayers = targetElement.querySelectorAll('.introjs-overlay');
+    if (!keepBackdrop) {
+      var overlayLayers = targetElement.querySelectorAll('.introjs-overlay');
 
-    if (overlayLayers && overlayLayers.length) {
-      _forEach(overlayLayers, function (overlayLayer) {
-        overlayLayer.style.opacity = 0;
-        window.setTimeout(function () {
-          if (this.parentNode) {
-            this.parentNode.removeChild(this);
-          }
-        }.bind(overlayLayer), 500);
-      }.bind(this));
+      if (overlayLayers && overlayLayers.length) {
+        _forEach(overlayLayers, function (overlayLayer) {
+          overlayLayer.style.opacity = 0;
+          window.setTimeout(function () {
+            if (this.parentNode) {
+              this.parentNode.removeChild(this);
+            }
+          }.bind(overlayLayer), 500);
+        }.bind(this));
+      }
     }
 
     //remove all helper layers
@@ -2404,8 +2407,8 @@
       _previousStep.call(this);
       return this;
     },
-    exit: function (force) {
-      _exitIntro.call(this, this._targetElement, force);
+    exit: function (force, keepBackdrop) {
+      _exitIntro.call(this, this._targetElement, force, keepBackdrop);
       return this;
     },
     refresh: function () {
