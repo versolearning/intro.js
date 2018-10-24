@@ -2246,7 +2246,10 @@
     var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
     var x = element.getBoundingClientRect();
     return {
-      top: x.top + scrollTop,
+      // Ignore scroll offset on certain elements to have accurate result
+      top: element.classList.contains("tutorial_ignore-scroll-offset")
+        ? x.top
+        : x.top + scrollTop,
       width: x.width,
       height: x.height,
       left: x.left + scrollLeft
